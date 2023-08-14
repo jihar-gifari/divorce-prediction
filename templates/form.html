@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Divorce Probability Prediction</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="static/style.css">
+    <style>
+        body {
+            background-image: url('static/desktop-wallpaper-divorce.jpg');
+            background-size: cover; /* Adjust the background size as needed */
+            background-repeat: no-repeat;
+            background-attachment: fixed; /* Keeps the background image fixed */
+        }
+        .introduction-box {
+            background-color: rgba(139, 69, 19, 0.7); /* Dark brown color with 70% transparency */
+            color: white;
+            padding: 50px;
+            text-align: center;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100vw; /* Full width of the viewport */
+            height: 50vh; /* Half height of the viewport */
+            overflow: auto; /* Enable scrolling within the box */
+            display: grid;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            place-items: center;
+            opacity: 1;
+            visibility: visible;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+        .introduction-box p {
+            margin: 10px 80px; /* Add top and bottom margin of 10px, and right and left margin of 20px */
+        }
+        .proceed-button {
+            background-color: #8B4513; /* Dark brown color */
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            display: block;
+            margin: auto;
+            margin-top: 20px;
+        }
+
+        .question-box {
+            border: 2px solid #ddd;
+            padding: 20px;
+            margin-bottom: 25px;
+            border-radius: 10px;
+            background-color: #f5f5f5;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .rating-box {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            max-width: 400px; /* Adjust the max width as needed */
+            margin-top: 10px;
+        }
+
+        h1 {
+            font-family: 'Playfair Display', serif;
+        }
+
+        p {
+            font-family: 'Source Sans Pro', sans-serif;
+        }
+
+        .rating-label {
+            font-family: 'Source Sans Pro', sans-serif;
+        }
+        #prediction-section {
+            display: none;
+        }
+        .grid-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr; /* Divide the container into 3 equal columns */
+            gap: 20px; /* Add some spacing between grid items */
+            max-width: 1500px; /* Adjust the max width as needed */
+            margin: 0 auto; /* Center the grid container */
+        }
+
+        .grid-item {
+            border: 2px solid #ddd;
+            padding: 10px;
+            border-radius: 10x;
+            background-color: transparent; 
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display&family=Crimson+Text&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="introduction-box" id="introduction-box">
+    <h2>Welcome to Divorce Probability Prediction</h2>
+    <p>
+        A platform that provides valuable insights into the likelihood of divorce. Leveraging a machine learning model that learned from historical data, I've crafted a tool that analyzes your responses to a curated set of questions. This analysis allows me to offer you a projected probability of divorce and also the reason why.
+    </p>
+    <div class="grid-container">
+        <div class="grid-item">
+            <h3>Benefit of This Prediction</h3>
+            <p>
+                Assess your relationship's divorce probability which will enabling you to identify improvement areas, leverage strengths, and gain the confidence to make informed decisions.
+            </p>
+        </div>
+        <div class="grid-item">
+            <h3>About the Data</h3>
+            <p>
+                 This model's ground-truth lies in a dataset which comprises 150 couples from varied Turkish regions, sourced through personal interviews. It encompasses both happily married and divorced couples, offering a comprehensive perspective.
+            </p>
+        </div>
+        <div class="grid-item">
+            <h3>Before You Try</h3>
+            <p>
+                Please be aware that this prediction comes from a machine learning model trained on historical data. While efforts have been made to ensure accuracy, some degree of uncertainty or variability may exists. 
+            </p>
+        </div>
+    </div>
+    <button class="proceed-button" id="proceed-button">Proceed to Prediction</button>
+</div>
+
+    <div class="main-box" id="prediction-section">
+        <h1>Divorce Probability Prediction</h1>
+        <p>Please note: Unanswered questions will be automatically imputed as 0 (Highly Disagree).</p>
+        <!-- Rest of your form content -->
+    
+
+    <form id="question-form" action="/predict" method="post">
+        {% for qid, question in questions.items() %}
+        <div class="question-box">
+            <p class="question-label"><strong>Question {{ qid }}:</strong> {{ question }}</p>
+            <div class="rating-box">
+                <label class="rating-label">Highly Disagree</label>
+                <input type="radio" name="q{{ qid }}" value="0">
+                <input type="radio" name="q{{ qid }}" value="1">
+                <input type="radio" name="q{{ qid }}" value="2">
+                <input type="radio" name="q{{ qid }}" value="3">
+                <input type="radio" name="q{{ qid }}" value="4">
+                <label class="rating-label">Highly Agree</label>
+            </div>
+        </div>
+        {% endfor %}
+        <input type="submit" value="Predict">
+    </form>
+    </div>
+    
+
+    <script>
+        const proceedButton = document.getElementById('proceed-button');
+        const introductionBox = document.getElementById('introduction-box');
+        const predictionSection = document.getElementById('prediction-section');
+
+        proceedButton.addEventListener('click', () => {
+            let introOpacity = 1;
+            const introSteps = 20;
+
+            const fadeOut = () => {
+                introOpacity -= 1 / introSteps;
+                introductionBox.style.opacity = introOpacity;
+
+                if (introOpacity <= 0) {
+                    introductionBox.style.display = 'none';
+                    proceedButton.style.display = 'none'; // Hide the button
+                    predictionSection.style.display = 'block'; // Show the prediction section
+                    predictionSection.style.opacity = 0; // Set opacity to 0 for smooth fade-in
+                    fadeIn(); // Call the fade-in function
+                    return;
+                }
+
+                requestAnimationFrame(fadeOut);
+            };
+
+            const fadeIn = () => {
+                let predictionOpacity = 0;
+                const predictionSteps = 20;
+
+                const fadeInAnimation = () => {
+                    predictionOpacity += 1 / predictionSteps;
+                    predictionSection.style.opacity = predictionOpacity;
+
+                    if (predictionOpacity >= 1) {
+                        return;
+                    }
+
+                    requestAnimationFrame(fadeInAnimation);
+                };
+
+                fadeInAnimation();
+            };
+
+            fadeOut();
+
+            // Scroll to the prediction section
+            predictionSection.scrollIntoView({ behavior: 'smooth' });
+        });
+
+        // Checkbox background color change script
+        const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+        checkboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', () => {
+                checkboxes.forEach(cb => {
+                    if (cb.checked) {
+                        cb.parentElement.style.backgroundColor = '#ffff99';
+                    } else {
+                        cb.parentElement.style.backgroundColor = '';
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
