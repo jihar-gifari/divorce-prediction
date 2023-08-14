@@ -1,5 +1,4 @@
 absl-py==1.4.0
-anaconda-client==1.11.2
 anaconda-navigator==2.4.0
 anyio==3.3.0
 appdirs==1.4.4
