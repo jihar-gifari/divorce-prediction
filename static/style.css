@@ -1,0 +1,49 @@
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    margin: 50px;
+}
+
+h1 {
+    margin-bottom: 30px;
+}
+
+.question {
+    margin: 20px;
+}
+
+.rating {
+    display: flex;
+    justify-content: center;
+    margin: 10px;
+}
+
+.rating i {
+    cursor: pointer;
+    font-size: 24px;
+    color: #ccc;
+    transition: color 0.3s;
+}
+
+.rating i.fas {
+    color: #007BFF;
+}
+
+/* New style for selected emoticon */
+.rating i.selected {
+    color: #eab676;
+}
+
+input[type="submit"] {
+    background-color: #007BFF;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+input[type="submit"]:hover {
+    background-color: #0056b3;
+}
