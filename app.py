@@ -4,6 +4,15 @@ import numpy as np
 import joblib
 from flask import Flask, render_template, request
 import shap
+import gspread
+from oauth2client.service_account import ServiceAccountCredentials
+
+scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
+credentials = ServiceAccountCredentials.from_json_keyfile_name("divorce-prediction-by-jihar-2dd31151c0d5.json", scope)
+client = gspread.authorize(credentials)
+
+sheet = client.open_by_key("1rVrqeW6nDs-WNCIP2Wl4qqXBYmm4wfQw8Xyb1uks6Qo")
+worksheet = sheet.get_worksheet(0)  # Assuming you want to use the first worksheet
 
 app = Flask(__name__)
 
@@ -69,39 +78,93 @@ questions = {
         54 : "I'm not afraid to tell my spouse about her/his incompetence."
 }
 
+# Load Google Sheets credentials and authenticate
+scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
+credentials = ServiceAccountCredentials.from_json_keyfile_name("divorce-prediction-by-jihar-2dd31151c0d5.json", scope)
+client = gspread.authorize(credentials)
+
+
 @app.route('/', methods=['GET'])
 def index():
     return render_template('form.html', questions=questions)
 
 @app.route('/predict', methods=['POST'])
 def predict():
+    # Gather user details
+    name = request.form.get('name')
+    email = request.form.get('email')
+    time_spent = int(request.form.get('time_spent'))  # Get the calculated time spent
+
+    user_details = [name, email, time_spent]  # Remove start_time and end_time
+
+    # Open the Google Sheet using its ID
+    sheet = client.open_by_key("1rVrqeW6nDs-WNCIP2Wl4qqXBYmm4wfQw8Xyb1uks6Qo")
+
+    try:
+        user_details_worksheet = sheet.worksheet("User Details")
+    except gspread.exceptions.WorksheetNotFound:
+        user_details_worksheet = sheet.add_worksheet(title="User Details", rows="100", cols="3")  # Adjust cols to 3
+        user_details_worksheet.append_row(["user_name", "user_email", "time_spent"])  # Remove start_time and end_time
+
+    # Check the number of rows in the User Details worksheet
+    current_rows = user_details_worksheet.row_count
+
+    # Set a threshold for when to add more rows (e.g., 80% of the initial limit)
+    row_threshold = 0.8 * 100  # Change 100 to your initial row limit
+
+    if current_rows >= row_threshold:
+        # Add more rows to the worksheet to accommodate more data
+        rows_to_add = 100  # Adjust the number of rows to add as needed
+        user_details_worksheet.add_rows(rows_to_add)
+
+    # Append user details to the User Details worksheet
+    user_details_worksheet.append_row(user_details)
+
+    # Gather user responses
     responses = []
     for qid in questions:
-        response = request.form.get(f'q{qid}')  # Get the user's response for the question
+        response = request.form.get(f'q{qid}')
         if response is not None and response != '':
-            responses.append(int(response))
+            responses.append(response)
         else:
-            responses.append(0)  # Use 0 as the default value for missing responses
+            responses.append(0)
 
-    # Convert responses to a format suitable for prediction
+    try:
+        responses_worksheet = sheet.worksheet("Responses")
+    except gspread.exceptions.WorksheetNotFound:
+        responses_worksheet = sheet.add_worksheet(title="Responses", rows="100", cols="55")  # Adjust cols to 55
+        header_row = list(questions.keys())
+        header_row.extend(["User Name", "User Email", "Predicted Divorce Probability"])
+        responses_worksheet.append_row(header_row)
+
+    # Calculate predicted divorce probability
     X = [responses]
-
-    # Predict divorce probability using the loaded model
-    prediction =  model.predict_proba(X)[0][0] * 100 # Assuming the model provides the probability of class 1 directly
-
+    prediction = model.predict_proba(X)[0][0] * 100
     shap_values = explainer.shap_values(pd.DataFrame(X, columns=questions.keys()))
-
     abs_shap_values = np.abs(shap_values[1][0])
-
     top_feature_indices = np.argsort(abs_shap_values)[::-1][:5]
 
     # Retrieve the top feature names from the questions dictionary
     top_feature_names = [questions[qid] for qid in top_feature_indices]
-
     top_feature_values = [responses[i] for i in top_feature_indices]
     top_feature_shap_values = shap_values[1][0][top_feature_indices]
 
-    return render_template('result.html', prediction=prediction, top_feature_names=top_feature_names, top_feature_values=top_feature_values, top_feature_shap_values=top_feature_shap_values)
+    # Append user responses to the Responses worksheet along with user name, email, and predicted probability
+    responses.append(name)  # Add user name to responses
+    responses.append(email)  # Add user email to responses
+    responses.append(prediction)  # Add predicted divorce probability to responses
+    responses_worksheet.append_row(responses)
+
+    # Rest of your shap_values code here...
+
+    return render_template('result.html', 
+                           prediction=prediction,
+                           user_name=name,
+                           user_email=email,
+                           time_spent=time_spent,
+                           top_feature_names=top_feature_names, 
+                           top_feature_values=top_feature_values, 
+                           top_feature_shap_values=top_feature_shap_values)
 
 if __name__ == '__main__':
     app.run()
