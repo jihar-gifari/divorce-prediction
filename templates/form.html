@@ -130,10 +130,15 @@
     <div class="main-box" id="prediction-section">
         <h1>Divorce Probability Prediction</h1>
         <p>Please note: Unanswered questions will be automatically imputed as 0 (Highly Disagree).</p>
-        <!-- Rest of your form content -->
     
 
     <form id="question-form" action="/predict" method="post">
+        <label for="name">Name:</label>
+        <input type="text" name="name" required><br><br>
+            
+        <label for="email">Email:</label>
+        <input type="email" name="email" required><br><br>
+
         {% for qid, question in questions.items() %}
         <div class="question-box">
             <p class="question-label"><strong>Question {{ qid }}:</strong> {{ question }}</p>
@@ -153,68 +158,85 @@
     </div>
     
 
-    <script>
-        const proceedButton = document.getElementById('proceed-button');
-        const introductionBox = document.getElementById('introduction-box');
-        const predictionSection = document.getElementById('prediction-section');
+<script>
+    const proceedButton = document.getElementById('proceed-button');
+    const introductionBox = document.getElementById('introduction-box');
+    const predictionSection = document.getElementById('prediction-section');
+    const predictionForm = document.getElementById('question-form');
+    let startTime;
 
-        proceedButton.addEventListener('click', () => {
-            let introOpacity = 1;
-            const introSteps = 20;
+    proceedButton.addEventListener('click', () => {
+        startTime = Date.now(); // Record the start time
 
-            const fadeOut = () => {
-                introOpacity -= 1 / introSteps;
-                introductionBox.style.opacity = introOpacity;
+        let introOpacity = 1;
+        const introSteps = 20;
 
-                if (introOpacity <= 0) {
-                    introductionBox.style.display = 'none';
-                    proceedButton.style.display = 'none'; // Hide the button
-                    predictionSection.style.display = 'block'; // Show the prediction section
-                    predictionSection.style.opacity = 0; // Set opacity to 0 for smooth fade-in
-                    fadeIn(); // Call the fade-in function
+        const fadeOut = () => {
+            introOpacity -= 1 / introSteps;
+            introductionBox.style.opacity = introOpacity;
+
+            if (introOpacity <= 0) {
+                introductionBox.style.display = 'none';
+                proceedButton.style.display = 'none'; // Hide the button
+                predictionSection.style.display = 'block'; // Show the prediction section
+                predictionSection.style.opacity = 0; // Set opacity to 0 for smooth fade-in
+                fadeIn(); // Call the fade-in function
+                return;
+            }
+
+            requestAnimationFrame(fadeOut);
+        };
+
+        const fadeIn = () => {
+            let predictionOpacity = 0;
+            const predictionSteps = 20;
+
+            const fadeInAnimation = () => {
+                predictionOpacity += 1 / predictionSteps;
+                predictionSection.style.opacity = predictionOpacity;
+
+                if (predictionOpacity >= 1) {
                     return;
                 }
 
-                requestAnimationFrame(fadeOut);
+                requestAnimationFrame(fadeInAnimation);
             };
 
-            const fadeIn = () => {
-                let predictionOpacity = 0;
-                const predictionSteps = 20;
+            fadeInAnimation();
+        };
 
-                const fadeInAnimation = () => {
-                    predictionOpacity += 1 / predictionSteps;
-                    predictionSection.style.opacity = predictionOpacity;
+        fadeOut();
 
-                    if (predictionOpacity >= 1) {
-                        return;
-                    }
+        // Scroll to the prediction section
+        predictionSection.scrollIntoView({ behavior: 'smooth' });
+    });
 
-                    requestAnimationFrame(fadeInAnimation);
-                };
-
-                fadeInAnimation();
-            };
-
-            fadeOut();
-
-            // Scroll to the prediction section
-            predictionSection.scrollIntoView({ behavior: 'smooth' });
-        });
-
-        // Checkbox background color change script
-        const checkboxes = document.querySelectorAll('input[type="checkbox"]');
-        checkboxes.forEach(checkbox => {
-            checkbox.addEventListener('change', () => {
-                checkboxes.forEach(cb => {
-                    if (cb.checked) {
-                        cb.parentElement.style.backgroundColor = '#ffff99';
-                    } else {
-                        cb.parentElement.style.backgroundColor = '';
-                    }
-                });
+    // Checkbox background color change script
+    const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+    checkboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', () => {
+            checkboxes.forEach(cb => {
+                if (cb.checked) {
+                    cb.parentElement.style.backgroundColor = '#ffff99';
+                } else {
+                    cb.parentElement.style.backgroundColor = '';
+                }
             });
         });
-    </script>
+    });
+
+    // Add event listener to the form submission
+    predictionForm.addEventListener('submit', () => {
+        const endTime = Date.now(); // Record the end time
+        const timeSpent = endTime - startTime; // Calculate time spent in milliseconds
+
+        // Add a hidden input field to the form to send the calculated time
+        const timeInput = document.createElement('input');
+        timeInput.type = 'hidden';
+        timeInput.name = 'time_spent';
+        timeInput.value = timeSpent;
+        predictionForm.appendChild(timeInput);
+    });
+</script>
 </body>
 </html>
