@@ -3,6 +3,8 @@
 Hey there! Welcome to my Divorce Probability Prediction project. 🚀 In this journey, I'll give you a sneak peek into how I tinkered with data, trained a machine learning model, 
 interpreted its mystical workings, and even managed to deploy it into the wilds of the internet using Flask, GCP, and Heroku. So, buckle up, and let's dive in!
 
+**NOTES: In this project, I utilized a pre-defined Python module that I personally crafted to execute a typical ML model. This is why, in the sections encompassing EDA, Cleaning, and Modeling, you'll discover the application of functions. However, you won't directly encounter the construction of these functions, as they're housed within the pre-defined module, a tool I frequently rely upon.**
+
 ## 1. EDA - Let's Get Our Sherlock Hats On 🕵️‍♂️
 Before doing predictions, I put on my detective cap and delved into the data. I know, not as cool as Benedict Cumberbatch, but I tried! I peeked into the Turkish Relationship Survey dataset
 like a nosy neighbor (without the gossip, of course). This was the stage where I tamed the unruly data, cleaned it up, and uncovered its quirks. Ah, the joy of spotting suspicious data, missing values and outliers - it's like finding the last piece of chocolate cake in the fridge!
@@ -35,8 +37,7 @@ suspicious = 'Q6', 'Q7', 'Q32', 'Q35', 'Q36', 'Q37', 'Q38', 'Q39', 'Q41', 'Q46',
              'Q31', 'Q40', 'Q45', 'Q48', 'Q50', 'Q51', 'Q52', 'Q54'
              
 
-Totally, there were 8 different treatments. Each treatments will be used to train models using various algorithm, best treatment and algorithm will be selected
-
+Totally, there were 8 different treatments. Each treatments will be used to train models using various algorithm, best treatment and algorithm will be selected.
 
 ## 3. Modelling and Evaluation - The "Aha!" Moment 🌟
 Across the 8 data treatments, I experimented with approximately 17 algorithms, leading to 136 model combinations. Initially, I assessed models using accuracy, precision, recall, F1-Score, and AUC/ROC. 
