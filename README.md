@@ -20,14 +20,17 @@ In the EDA phase, my main goals are :
 ## 2. Data Preprocessing - The Art of Transformation 🧙‍♀️
 As noted in previous EDA, no missing values, duplicates, or imbalanced target variables exist. Only minor outliers appear and certain variables yield unusual results (read: suspicious data), requiring special treatment. Here are the approaches I used:
 
-
+![Cleaning Treatments](https://github.com/jihar-gifari/divorce-prediction/blob/main/divorce_treatments.png)
 - Exclusion 1 : Exclude Very Suspicious Variable Only
 - Exclusion 2 : Exclude All Suspicious Variable 
 - Manipulation 1 : Manipulate value in Very Suspicious variable only
 - Manipulation 2 : Manipulate value in All Suspicious variable
 
+
 Manipulation : replace 0->4, 1->3, 4->0, 3->1
+
 very_suspicious = 'Q6', 'Q7', 'Q32', 'Q35', 'Q36', 'Q37', 'Q38', 'Q39', 'Q41', 'Q46'
+
 suspicious = 'Q6', 'Q7', 'Q32', 'Q35', 'Q36', 'Q37', 'Q38', 'Q39', 'Q41', 'Q46', 
              'Q31', 'Q40', 'Q45', 'Q48', 'Q50', 'Q51', 'Q52', 'Q54'
              
