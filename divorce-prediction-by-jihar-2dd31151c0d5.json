@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "divorce-prediction-by-jihar",
+  "private_key_id": "2dd31151c0d5fac2d63cf716565264baf43e7419",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvwIBADANBgkqhkiG9w0BAQEFAASCBKkwggSlAgEAAoIBAQDdhLlVkKo2tbKg\nkO8h8LsHOOwitXY+e1i8lztAX5Q66H8UTmzxmdIZEuba3YjVGLJ4lLv2VfZQwbe9\nnPkMFqdMYkJUrvkvUU2uSGW7S9ME/W6m7OMpioHy9W5uxB725A1szEZnH1R58iks\npF53Vi1VkdGsz1tdc+3ST9iD/X8Sf3eN2XnOMbEBuHLAdM3jK0LcUT1RaNNr/cwN\nkmGvjOwv3lFLgcFgQDhSNF02AYc6d0121pC2Mx3uhtQ1zOfzetJJemzZTqlkbP+3\nvwhAq/5CCpXQVvpjHpRChyyzfasdJid1XxzRZsRkUD/xiq4Yo4OFI955VMsNxT5v\niLH5dFCVAgMBAAECggEALlivTRlyH3W3DJSeT6/V9a4ha6ajOXHlsDmE9lQ5B3Uu\n52D8NrVL6Z6Uidy5XPpolsVpqSG1ohJRvtx5l9+ie58ASUb9kDqWwdzYWg5EdYIP\ntWGRKpcV1q8mforOfrHapDV+EmPR8RyrJDG0qQuw+vsCD0GoGD6h1rOJdZ4jSMta\nT0ak1LU1FjsDaSWgDK2EHV/PKWpspUxvtU1qBk9sLsQ7zAngOOrrZMJ0VrK+OZyw\n0Gz3HXI8MMuDV7CEizCOKKEZpo9n/hacmC9LXCxu56JzpNZzIPx/4Mbatgiu+Hc6\n3taLqEq3b9Lhcb9Sr41B+r1HFYzVG6MJ6nsL68+gWQKBgQD3kxtDzRz8SiiFcmus\nfpH1JRzwXtYp62sg+iASHkSAMdowNw4ZhuiY43eUhJoqFa74ss9sLNnduHsinskw\n+I3jbcidO7leWgLAPBcAOaPE3+5ytJy7vqaDMTxz87u6M1Z5PQVQdmB0YBPryp16\nUD4Tb41LOOpvt8SScOgIyEXzXQKBgQDlDp0RyqgiOR3xeX/AhaX9N4CKEb7njFfI\nV3ILFzWVdbBApV7k79K36REf152EmKo1UFG9CSOZhOGREnWTJfoaXFwKN9NG5WGC\n+YJRHyAG73DTA0SWE2i8gpUeHtxHpH/WD5YNLmaYQoNkOrPbtqkilbA7Mn017SAK\nlO6cSM12mQKBgQCNete9612BH7AAct7teHdYrJjZFJk2434ZHldtgzaKO/MAUrYQ\nCHSrynHvwceH/VQ8c5LtssPeXSqhIjS/c4tCSN64XAUW0kF4Md7DFi1suLu/eU+I\nSu9FUcHGUacaRXRJXIHI9Z0xZCZ+PQ+5clnHKZyJPEFdDpubREKVoj23UQKBgQC3\nCZB2MS1d+6pz1hVCMQpNaFas/jVBLqLPEyGsvyUwg9UOM5e69fG6yOHIQjI7TQtm\ngwJuPqlV+huOI+QUbBqJihh6idWpJ49ebCe4z1h2ckwEMu5RxrzBNtAWO67nCQqm\ncdoEOnn9XdlE9KvY/QP3AQrMozHvL8eU7SInfP3CsQKBgQDX8+g46rcFvj2R72mt\nJiDdCSHjBid3b907tH+ekpPLXE1Hp9NjFlpuXE4KVPBy2KMRvIwxR2iOlD+ztxzM\ngNtJJN+qwSpB2c5o68z3qf0HrGAEm94fdjdGjH/eRz8PdHEpuei6MetyJ9lOwNIK\nLAspc+r2RezrJn6AnUrtBG2vhw==\n-----END PRIVATE KEY-----\n",
+  "client_email": "divorce-prediction-by-jihar@divorce-prediction-by-jihar.iam.gserviceaccount.com",
+  "client_id": "114334965405654332768",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/divorce-prediction-by-jihar%40divorce-prediction-by-jihar.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}
