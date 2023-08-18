@@ -95,6 +95,29 @@
             border-radius: 10x;
             background-color: transparent; 
         }
+        .tooltip {
+            background-color: rgba(255, 255, 255, 0.8); /* 80% transparency */
+            font-size: 12px; /* Smaller font size */
+            padding: 8px;
+            border-radius: 5px;
+            position: fixed;
+            top: 25px; /* Adjust as needed */
+            left: 0;
+            width: 200px; /* Adjust as needed */
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+            visibility: hidden;
+            opacity: 0;
+            z-index: 1;
+        }
+
+        .tooltip-text {
+            margin: 0 0 8px;
+        }
+
+        .tooltip-example {
+            margin: 0;
+            color: #888;
+        }
     </style>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display&family=Crimson+Text&display=swap" rel="stylesheet">
 </head>
@@ -129,8 +152,6 @@
 
     <div class="main-box" id="prediction-section">
         <h1>Divorce Probability Prediction</h1>
-        <p>Please note: Unanswered questions will be automatically imputed as 0 (Highly Disagree).</p>
-    
 
     <form id="question-form" action="/predict" method="post">
         <label for="name">Name:</label>
@@ -139,9 +160,20 @@
         <label for="email">Email:</label>
         <input type="email" name="email" required><br><br>
 
+        <p>Please note: Unanswered questions will be automatically imputed as 0 (Highly Disagree).</p>
+
         {% for qid, question in questions.items() %}
         <div class="question-box">
-            <p class="question-label"><strong>Question {{ qid }}:</strong> {{ question }}</p>
+              <p class="question-label">
+                <strong>Question {{ qid }}:</strong> 
+                {{ question }}
+                <span class="tooltip-button" onmouseover="showTooltip({{ qid }})" onmouseout="hideTooltip({{ qid }})">
+                    <i class="fas fa-question-circle"></i>
+                </span>
+                <div class="tooltip" id="tooltip-{{ qid }}">
+                    <!-- Tooltip content will be shown when the user hovers over the question mark button -->
+                </div>
+            </p>
             <div class="rating-box">
                 <label class="rating-label">Highly Disagree</label>
                 <input type="radio" name="q{{ qid }}" value="0">
@@ -237,6 +269,141 @@
         timeInput.value = timeSpent;
         predictionForm.appendChild(timeInput);
     });
+     // Function to show tooltip
+    function showTooltip(questionId) {
+        const tooltip = document.getElementById(`tooltip-${questionId}`);
+        const tooltipContent = getTooltipContent(questionId);
+        
+        tooltip.innerHTML = tooltipContent;
+        tooltip.style.visibility = 'visible';
+        tooltip.style.opacity = '1';
+        tooltip.style.left = `${event.clientX}px`;
+        tooltip.style.top = `${event.clientY}px`;
+    }
+
+    // Function to hide tooltip
+    function hideTooltip(questionId) {
+        const tooltip = document.getElementById(`tooltip-${questionId}`);
+        tooltip.style.visibility = 'hidden';
+        tooltip.style.opacity = '0';
+    }
+
+    // Function to get tooltip content based on question ID
+    function getTooltipContent(questionId) {
+        switch (questionId) {
+            case 1:
+                return "Apologizing during disagreements often resolves the issue peacefully. In other words : 'If one of us says sorry when our arguments get heated, the argument usually ends.'";
+            case 2:
+                return "We can usually overlook our differences, even when things are tough. In other words : 'Even if we have disagreements, we're usually able to move past them.'";
+            case 3:
+                return "We can reset our discussions if they become unproductive. In other words : 'If our conversation is heading in a bad direction, we can start over and fix it.'";
+            case 4:
+                return "I believe reaching out to my spouse can improve our discussions. In other words : 'When I talk to my spouse, it usually helps to solve the issue.'";
+            case 5:
+                return "The time spent with my spouse feels special. In other words : 'The moments I share with my spouse are valuable to me.'";
+            case 6:
+                return "We lack time to be together at home. In other words : 'We don't spend much quality time at home.'";
+            case 7:
+                return "At home, we feel distant like strangers. In other words : 'We live together, but it feels like we're just sharing the same space.'";
+            case 8:
+                return "I enjoy spending holidays with my spouse. In other words : 'Vacations and holidays are enjoyable times for both of us.'";
+            case 9:
+                return "I have a good time when traveling with my spouse. In other words : 'Traveling together is fun and enjoyable.'";
+            case 10:
+                return "We share common goals with my spouse. In other words: 'We both have similar ambitions and things we want to achieve.'";
+            case 11:
+                return "I believe we'll have a harmonious relationship in the future. In other words: 'Looking ahead, I see us having a strong and harmonious connection.'";
+            case 12:
+                return "We value personal freedom similarly in our relationship. In other words: 'Both of us appreciate having our personal space and freedom.'";
+            case 13:
+                return "Our taste in entertainment aligns. In other words: 'We have similar preferences when it comes to entertainment and leisure activities.'";
+            case 14:
+                return "We share common goals for our family and friends. In other words: 'Our future plans for our family and friends are aligned.'";
+            case 15:
+                return "Our dreams and aspirations are in sync. In other words: 'We have similar hopes and dreams for our life together.'";
+            case 16:
+                return "We agree on what love means in our relationship. In other words : 'We have similar views on how love should be expressed and felt.'";
+            case 17:
+                return "We share the same understanding of happiness. In other words : 'Our perception of happiness and contentment aligns closely.'";
+            case 18:
+                return "We have mutual ideas about how marriage should be. In other words: 'Our vision of a successful marriage is quite similar.'";
+            case 19:
+                return "We share common ideas about marital roles. In other words: 'We both understand and agree on our roles in the marriage.'";
+            case 20:
+                return "We trust each other on similar levels. In other words: 'We both have confidence in each other's words and actions.'"
+            case 21:
+                return "I know my spouse's preferences. In other words, I'm aware of what my spouse likes and dislikes in various things.";
+            case 22:
+                return "I understand how my spouse wants to be taken care of when unwell. In other words, I know how to provide comfort and support when my spouse is sick.";
+            case 23:
+                return "I can name my spouse's favorite food. In other words, I know what my spouse enjoys eating the most.";
+            case 24:
+                return "I am aware of my spouse's sources of stress. In other words, I can identify the things that cause stress for my spouse.";
+            case 25:
+                return "I have insight into my spouse's thoughts and feelings. In other words, I understand what my spouse is thinking and feeling.";
+            case 26:
+                return "I am familiar with my spouse's primary worries. In other words, I know what my spouse's main concerns and fears are.";
+            case 27:
+                return "I can identify my spouse's current stressors. In other words, I know the factors that are currently causing stress for my spouse.";
+            case 28:
+                return "I am aware of my spouse's hopes and desires. In other words, I know what my spouse wishes to achieve and experience.";
+            case 29:
+                return "I have a good understanding of my spouse. In other words, I know my spouse very well, including their personality and preferences.";
+            case 30:
+                return "I am familiar with my spouse's friends and social connections. In other words, I know who my spouse's friends are and how they interact.";
+            case 31:
+                return "I tend to become angry during arguments with my spouse. In other words, I often feel my temper rising when we disagree.";
+            case 32:
+                return "I use phrases like 'you always' or 'you never' during arguments. In other words, I sometimes make generalizations like 'you always do this' during our discussions.";
+            case 33:
+                return "I may make negative comments about my spouse's personality. In other words, in heated moments, I might say negative things about my spouse's character.";
+            case 34:
+                return "I sometimes use offensive language during arguments. In other words, I might use hurtful words when we're in a heated discussion.";
+            case 35:
+                return "I occasionally insult my spouse during arguments. In other words, I might say hurtful things that are meant to insult my spouse.";
+            case 36:
+                return "I sometimes behave in a belittling manner during arguments. In other words, in disagreements, I might use demeaning behaviors or language.";
+            case 37:
+                return "Our arguments are not usually calm and composed. In other words, our discussions often become intense and emotional.";
+            case 38:
+                return "I dislike how my spouse initiates discussions. In other words, I'm not a fan of my spouse's approach when starting conversations.";
+            case 39:
+                return "Our arguments tend to arise suddenly. In other words, disagreements often seem to come out of nowhere.";
+            case 40:
+                return "I sometimes start a discussion without fully understanding the topic. In other words, I might jump into a conversation before fully grasping what's being discussed.";
+            case 41:
+                return "I sometimes lose my calm while discussing with my spouse. In other words, I may get upset or frustrated during our conversations.";
+            case 42:
+                return "I tend to exit the conversation abruptly without saying anything. In other words, I might walk away from the discussion without expressing my thoughts.";
+            case 43:
+                return "I often choose to remain silent to ease the tension. In other words, I prefer not to talk if the conversation is getting too intense.";
+            case 44:
+                return "On occasion, I think it's better to leave home temporarily. In other words, I might feel that taking a break from our environment could help.";
+            case 45:
+                return "I'd rather stay quiet than engage in a conversation. In other words, I prefer not to speak up during discussions.";
+            case 46:
+                return "Even if I'm right, I might stay silent to hurt my spouse. In other words, I may choose not to express my thoughts to make a point.";
+            case 47:
+                return "I sometimes remain silent during discussions due to fear of anger. In other words, I avoid speaking up to prevent escalating the situation.";
+            case 48:
+                return "I often believe I'm right during arguments. In other words, I tend to think that my perspective is the correct one.";
+            case 49:
+                return "I find it unfair to be blamed for things I haven't done. In other words, I think it's unjust to be accused of actions I didn't commit.";
+            case 50:
+                return "I don't believe I'm responsible for the issues raised. In other words, I don't think I'm at fault for the problems being discussed.";
+            case 51:
+                return "I don't view myself as the source of problems at home. In other words, I don't think my actions contribute to the issues.";
+            case 52:
+                return "I wouldn't hesitate to point out my spouse's shortcomings. In other words, I feel comfortable highlighting areas where my spouse falls short.";
+            case 53:
+                return "I sometimes remind my spouse of their imperfections during arguments. In other words, I might bring up my spouse's weaknesses when we're upset.";
+            case 54:
+                return "I don't shy away from discussing my spouse's shortcomings. In other words, I'm open to addressing areas where my spouse might struggle.";
+                // Add cases for other questions
+            default:
+                return "";
+        }
+    }
 </script>
 </body>
 </html>
